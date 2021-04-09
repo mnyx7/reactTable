@@ -6,22 +6,6 @@ import { Table, Input, InputNumber, Popconfirm, Form, Typography } from 'antd';
 import jsonData from './data/data.json';
 
 
-console.log('loadData ', jsonData)
-// const originData = [];
-
-
-
-// for (let i = 0; i < 100; i++) {
-//   originData.push({
-//     key: i.toString(),
-//     id: i+1,
-//     name: `Name ${i+1}`,
-//     surname: `Surname ${i+1}`,
-//     dateofbirth: `${i}.12.1989`,
-//     position: `Head of unit no. ${i}`,
-//     phonenumber: `${i}234865`,
-//   });
-// }
 
 const EditableCell = ({
   editing,

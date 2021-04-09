@@ -1,27 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
 import 'antd/dist/antd.css';
 import './index.css';
 import { Table, Input, InputNumber, Popconfirm, Form, Typography } from 'antd';
-import jsonData from './data/data.json';
+const originData = [];
 
-
-console.log('loadData ', jsonData)
-// const originData = [];
-
-
-
-// for (let i = 0; i < 100; i++) {
-//   originData.push({
-//     key: i.toString(),
-//     id: i+1,
-//     name: `Name ${i+1}`,
-//     surname: `Surname ${i+1}`,
-//     dateofbirth: `${i}.12.1989`,
-//     position: `Head of unit no. ${i}`,
-//     phonenumber: `${i}234865`,
-//   });
-// }
+for (let i = 0; i < 100; i++) {
+  originData.push({
+    key: i.toString(),
+    name: `Edrward ${i}`,
+    age: 32,
+    address: `London Park no. ${i}`,
+  });
+}
 
 const EditableCell = ({
   editing,
@@ -58,16 +49,12 @@ const EditableCell = ({
   );
 };
 
-export const IbarTable = () => {
+export const  EditableTable = () => {
   const [form] = Form.useForm();
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(originData);
   const [editingKey, setEditingKey] = useState('');
 
-  useEffect(() => {
-    setData(jsonData)
-  }, [])
-
-  const isEditing = (record) => record.id === editingKey;
+  const isEditing = (record) => record.key === editingKey;
 
   const edit = (record) => {
     form.setFieldsValue({
@@ -76,14 +63,8 @@ export const IbarTable = () => {
       address: '',
       ...record,
     });
-    setEditingKey(record.id);
+    setEditingKey(record.key);
   };
-
-  const deleteItem = (record) => {
-    console.log('allData: ',record)
-    const allData = data.filter((item) => item.id !== record.id)
-    setData(allData)
-  }
 
   const cancel = () => {
     setEditingKey('');
@@ -93,7 +74,7 @@ export const IbarTable = () => {
     try {
       const row = await form.validateFields();
       const newData = [...data];
-      const index = newData.findIndex((item) => key === item.id);
+      const index = newData.findIndex((item) => key === item.key);
 
       if (index > -1) {
         const item = newData[index];
@@ -112,53 +93,33 @@ export const IbarTable = () => {
 
   const columns = [
     {
-      title: 'ID',
-      dataIndex: 'id',
-      width: '5%',
-      editable: true,
-    },
-    {
       title: 'name',
       dataIndex: 'name',
+      width: '25%',
+      editable: true,
+    },
+    {
+      title: 'age',
+      dataIndex: 'age',
       width: '15%',
       editable: true,
     },
     {
-      title: 'Surname',
-      dataIndex: 'surname',
-      width: '15%',
-      editable: true,
-    },
-    {
-      title: 'Date of birth',
-      dataIndex: 'dateofbirth',
-      width: '15%',
-      editable: true,
-    },
-
-    {
-      title: 'Position',
-      dataIndex: 'position',
-      width: '20%',
-      editable: true,
-    },
-    {
-      title: 'Phone Number',
-      dataIndex: 'phonenumber',
-      width: '20%',
+      title: 'address',
+      dataIndex: 'address',
+      width: '40%',
       editable: true,
     },
     {
       title: 'operation',
       dataIndex: 'operation',
       render: (_, record) => {
-        console.log('record ', record)
         const editable = isEditing(record);
         return editable ? (
           <span>
             <a
               href="javascript:;"
-              onClick={() => save(record.id)}
+              onClick={() => save(record.key)}
               style={{
                 marginRight: 8,
               }}
@@ -169,16 +130,10 @@ export const IbarTable = () => {
               <a>Cancel</a>
             </Popconfirm>
           </span>
-        ) : (< div>
+        ) : (
           <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)}>
             Edit
           </Typography.Link>
-
-          <Typography.Link disabled={editingKey !== ''} onClick={() => deleteItem(record)}>
-            <span>     Delete</span>
-          </Typography.Link>
-
-        </div>
         );
       },
     },
